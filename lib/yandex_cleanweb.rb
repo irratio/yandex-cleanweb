@@ -25,17 +25,13 @@ module YandexCleanweb
       request_id = request_id_tag[0].content
       spam_flag = spam_flag_tag[0].attributes["spam-flag"].content
 
-      if spam_flag == 'yes'
-        links = doc.xpath('//check-spam-result/links')[0].children
+      links = doc.xpath('//check-spam-result/links')[0].children
 
-        links.map do |el|
-          [el.attributes["url"], el.attributes["spam_flag"] == 'yes']
-        end
-
-        { id: request_id, links: links }
-      else
-        false
+      links.map do |el|
+        [el.attributes["url"], el.attributes["spam_flag"] == 'yes']
       end
+
+      { id: request_id, links: links, spam: (spam_flag == 'yes') }
     end
 
     def get_captcha(request_id)
